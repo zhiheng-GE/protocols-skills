@@ -6,7 +6,7 @@
 
 
 <p align="center">
-  <img src="./docs/assets/project-overview.svg" alt="protocols-skills 项目结构与使用流程" width="900">
+  <img src="./docs/assets/project-overview.png" alt="Agent Skills Repository Architecture" width="1000">
 </p>
 
 ---
