@@ -4,6 +4,11 @@
 
 项目目标不是让 AI “随便写代码”，而是把成熟的软件工程实践沉淀成一组小而清晰、可组合、可修改的工作流，让智能体在开发、调试、需求澄清、架构改进和任务拆分时更稳定、更可靠。
 
+
+<p align="center">
+  <img src="./docs/assets/project-overview.svg" alt="protocols-skills 项目结构与使用流程" width="900">
+</p>
+
 ---
 
 ## 项目定位

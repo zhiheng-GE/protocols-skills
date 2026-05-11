@@ -1,0 +1,108 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">protocols-skills 项目结构与使用流程</title>
+  <desc id="desc">展示中文开发者如何通过 README 和安装脚本，将仓库中的 skills 安装到 Claude 或 Codex，并通过维护脚本保持 README、bucket README 和插件清单一致。</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="720" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F8FBFF"/>
+      <stop offset="1" stop-color="#F3F7F1"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#06B6D4"/>
+    </linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#16A34A"/>
+      <stop offset="1" stop-color="#84CC16"/>
+    </linearGradient>
+    <linearGradient id="orange" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#EA580C"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#0F172A" flood-opacity="0.12"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+      <path d="M2 2L10 6L2 10" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .title { font: 700 34px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #0F172A; }
+      .subtitle { font: 500 18px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .box-title { font: 700 23px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #0F172A; }
+      .box-sub { font: 500 15px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #475569; }
+      .small { font: 600 14px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #334155; }
+      .mono { font: 600 14px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #1E293B; }
+      .pill { font: 700 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: white; }
+      .muted { font: 500 13px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #64748B; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="720" rx="34" fill="url(#bg)"/>
+
+  <text x="600" y="64" text-anchor="middle" class="title">中文开发友好的 Agent Skills 仓库</text>
+  <text x="600" y="98" text-anchor="middle" class="subtitle">文档入口 → Skills 分类 → 全局安装 → Claude / Codex 使用 → 一致性维护</text>
+
+  <!-- Left docs -->
+  <rect x="60" y="150" width="250" height="210" rx="22" fill="white" filter="url(#shadow)"/>
+  <rect x="84" y="174" width="92" height="28" rx="14" fill="url(#blue)"/>
+  <text x="130" y="193" text-anchor="middle" class="pill">入口文档</text>
+  <text x="84" y="235" class="box-title">README.md</text>
+  <text x="84" y="265" class="box-sub">中文主入口：定位、分类、安装</text>
+  <text x="84" y="294" class="mono">README.zh-CN.md</text>
+  <text x="84" y="322" class="mono">CONTEXT.md / CLAUDE.md</text>
+
+  <!-- Skills center -->
+  <rect x="395" y="130" width="410" height="315" rx="26" fill="white" filter="url(#shadow)"/>
+  <text x="600" y="174" text-anchor="middle" class="box-title">skills/</text>
+  <text x="600" y="202" text-anchor="middle" class="box-sub">每个目录都是一个可加载的 SKILL.md</text>
+
+  <rect x="430" y="232" width="340" height="50" rx="16" fill="#EFF6FF" stroke="#BFDBFE"/>
+  <text x="455" y="263" class="small">engineering：TDD、诊断、PRD、issue 拆分、架构改进</text>
+  <rect x="430" y="300" width="340" height="50" rx="16" fill="#F0FDF4" stroke="#BBF7D0"/>
+  <text x="455" y="331" class="small">productivity：追问、压缩沟通、创建新 skill</text>
+  <rect x="430" y="368" width="340" height="50" rx="16" fill="#FFF7ED" stroke="#FED7AA"/>
+  <text x="455" y="399" class="small">misc：Git 护栏、pre-commit、练习脚手架等</text>
+
+  <!-- Right install -->
+  <rect x="890" y="150" width="250" height="210" rx="22" fill="white" filter="url(#shadow)"/>
+  <rect x="914" y="174" width="92" height="28" rx="14" fill="url(#green)"/>
+  <text x="960" y="193" text-anchor="middle" class="pill">全局安装</text>
+  <text x="914" y="235" class="box-title">软链接安装</text>
+  <text x="914" y="265" class="mono">./scripts/link-public-skills.sh</text>
+  <text x="914" y="294" class="box-sub">Claude：~/.claude/skills</text>
+  <text x="914" y="322" class="box-sub">Codex：~/.codex/skills</text>
+
+  <!-- Bottom agents -->
+  <rect x="300" y="520" width="600" height="120" rx="26" fill="white" filter="url(#shadow)"/>
+  <rect x="330" y="548" width="120" height="42" rx="21" fill="#111827"/>
+  <text x="390" y="575" text-anchor="middle" class="pill">Claude Code</text>
+  <rect x="470" y="548" width="120" height="42" rx="21" fill="#111827"/>
+  <text x="530" y="575" text-anchor="middle" class="pill">Codex</text>
+  <text x="620" y="574" class="box-sub">在任意项目中调用英文命令名：</text>
+  <text x="330" y="618" class="mono">/tdd  /diagnose  /to-prd  /grill-with-docs  /write-a-skill</text>
+
+  <!-- Maintenance -->
+  <rect x="60" y="430" width="250" height="160" rx="22" fill="white" filter="url(#shadow)"/>
+  <rect x="84" y="454" width="92" height="28" rx="14" fill="url(#orange)"/>
+  <text x="130" y="473" text-anchor="middle" class="pill">维护校验</text>
+  <text x="84" y="516" class="mono">./scripts/check-consistency.sh</text>
+  <text x="84" y="546" class="box-sub">校验 README、bucket README</text>
+  <text x="84" y="574" class="box-sub">和 plugin.json 是否一致</text>
+
+  <!-- Plugin -->
+  <rect x="890" y="430" width="250" height="160" rx="22" fill="white" filter="url(#shadow)"/>
+  <rect x="914" y="454" width="92" height="28" rx="14" fill="#6366F1"/>
+  <text x="960" y="473" text-anchor="middle" class="pill">插件清单</text>
+  <text x="914" y="516" class="mono">.claude-plugin/plugin.json</text>
+  <text x="914" y="546" class="box-sub">声明公开稳定 skills</text>
+  <text x="914" y="574" class="box-sub">保持命令名和路径英文稳定</text>
+
+  <!-- arrows -->
+  <path d="M310 255 C345 255 360 255 394 255" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M806 255 C840 255 856 255 889 255" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M1015 361 C1015 470 840 520 748 540" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M600 446 C600 470 600 492 600 519" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M310 510 C350 510 376 492 420 445" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+  <path d="M890 510 C850 510 824 492 780 445" stroke="#475569" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+
+  <text x="600" y="685" text-anchor="middle" class="muted">核心策略：完整中文说明 + 保留英文命令名 + 通过脚本保持结构一致</text>
+</svg>
