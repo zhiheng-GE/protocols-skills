@@ -1,71 +1,80 @@
 ---
 name: improve-codebase-architecture
-description: Find deepening opportunities in a codebase, informed by the domain language in CONTEXT.md and the decisions in docs/adr/. Use when the user wants to improve architecture, find refactoring opportunities, consolidate tightly-coupled modules, or make a codebase more testable and AI-navigable.
+description: 结合 CONTEXT.md 的领域语言和 docs/adr/ 的决策记录，寻找代码库中的深模块机会。用户想改进架构、发现重构机会、合并强耦合模块，或让代码更可测试、更适合 AI 导航时使用。
 ---
 
 # Improve Codebase Architecture
 
-Surface architectural friction and propose **deepening opportunities** — refactors that turn shallow modules into deep ones. The aim is testability and AI-navigability.
+发现架构摩擦，并提出 **深模块机会**：把浅模块重构成深模块。目标是提升可测试性和 AI 可导航性。
 
-## Glossary
+## 词汇表
 
-Use these terms exactly in every suggestion. Consistent language is the point — don't drift into "component," "service," "API," or "boundary." Full definitions in [LANGUAGE.md](LANGUAGE.md).
+在每条建议中准确使用这些术语。语言一致本身就是目标。完整定义见 [LANGUAGE.md](LANGUAGE.md)。
 
-- **Module** — anything with an interface and an implementation (function, class, package, slice).
-- **Interface** — everything a caller must know to use the module: types, invariants, error modes, ordering, config. Not just the type signature.
-- **Implementation** — the code inside.
-- **Depth** — leverage at the interface: a lot of behaviour behind a small interface. **Deep** = high leverage. **Shallow** = interface nearly as complex as the implementation.
-- **Seam** — where an interface lives; a place behaviour can be altered without editing in place. (Use this, not "boundary.")
-- **Adapter** — a concrete thing satisfying an interface at a seam.
-- **Leverage** — what callers get from depth.
-- **Locality** — what maintainers get from depth: change, bugs, knowledge concentrated in one place.
+- **模块（Module）** — 任何同时拥有接口和实现的东西：函数、类、包、slice。
+- **接口（Interface）** — 调用方为了使用模块必须知道的一切：类型、不变量、错误模式、顺序、配置。不只是类型签名。
+- **实现（Implementation）** — 模块内部代码。
+- **深度（Depth）** — 接口杠杆：小接口背后有大量行为。**深** = 高杠杆；**浅** = 接口几乎和实现一样复杂。
+- **接缝（Seam）** — 接口所在的位置；可以改变行为而不必原地修改的地方。使用这个词，不要说 “boundary”。
+- **适配器（Adapter）** — 在接缝处满足接口的具体实现。
+- **杠杆（Leverage）** — 调用方从深度中获得的收益。
+- **局部性（Locality）** — 维护者从深度中获得的收益：变化、bug、知识集中在一个地方。
 
-Key principles (see [LANGUAGE.md](LANGUAGE.md) for the full list):
+## 流程
 
-- **Deletion test**: imagine deleting the module. If complexity vanishes, it was a pass-through. If complexity reappears across N callers, it was earning its keep.
-- **The interface is the test surface.**
-- **One adapter = hypothetical seam. Two adapters = real seam.**
+1. **读取语言和决策**
+   - 阅读 `CONTEXT.md`，使用项目领域术语。
+   - 阅读相关 `docs/adr/`，不要提出违反已接受决策的建议，除非明确建议 supersede。
 
-This skill is _informed_ by the project's domain model. The domain language gives names to good seams; ADRs record decisions the skill should not re-litigate.
+2. **绘制模块地图**
+   - 找出高变更、高耦合、高认知负担区域。
+   - 标出调用方、接口、实现和接缝。
+   - 优先看测试困难、重复逻辑、配置散落、调用方需要知道太多的地方。
 
-## Process
+3. **识别浅模块气味**
+   - 调用方必须按复杂顺序调用多个函数。
+   - 同一个规则散落在多个模块。
+   - 测试需要大量 mock 内部协作者。
+   - 新功能需要在很多文件中做相同形状的修改。
+   - “工具”模块只是暴露实现细节，没有抽象收益。
 
-### 1. Explore
+4. **提出深模块机会**
+   每个机会都要说明：
+   - 现有接口为什么浅；
+   - 新接口会隐藏什么实现复杂度；
+   - 哪个接缝应该承载新接口；
+   - 调用方会少知道什么；
+   - 如何用测试锁住行为。
 
-Read the project's domain glossary and any ADRs in the area you're touching first.
+5. **排序**
+   优先选择：
+   - 风险低、收益高；
+   - 能减少未来 agent 迷路；
+   - 能让测试通过公共接口表达行为；
+   - 与当前工作流相关。
 
-Then use the Agent tool with `subagent_type=Explore` to walk the codebase. Don't follow rigid heuristics — explore organically and note where you experience friction:
+## 输出格式
 
-- Where does understanding one concept require bouncing between many small modules?
-- Where are modules **shallow** — interface nearly as complex as the implementation?
-- Where have pure functions been extracted just for testability, but the real bugs hide in how they're called (no **locality**)?
-- Where do tightly-coupled modules leak across their seams?
-- Which parts of the codebase are untested, or hard to test through their current interface?
+```markdown
+## 架构地图
 
-Apply the **deletion test** to anything you suspect is shallow: would deleting it concentrate complexity, or just move it? A "yes, concentrates" is the signal you want.
+- 模块：...
+- 调用方：...
+- 当前接缝：...
 
-### 2. Present candidates
+## 深模块机会
 
-Present a numbered list of deepening opportunities. For each candidate:
+### 1. 标题
 
-- **Files** — which files/modules are involved
-- **Problem** — why the current architecture is causing friction
-- **Solution** — plain English description of what would change
-- **Benefits** — explained in terms of locality and leverage, and also in how tests would improve
+- 当前摩擦：...
+- 建议接口：...
+- 隐藏的实现：...
+- 测试方式：...
+- 风险：低/中/高
 
-**Use CONTEXT.md vocabulary for the domain, and [LANGUAGE.md](LANGUAGE.md) vocabulary for the architecture.** If `CONTEXT.md` defines "Order," talk about "the Order intake module" — not "the FooBarHandler," and not "the Order service."
+## 推荐顺序
 
-**ADR conflicts**: if a candidate contradicts an existing ADR, only surface it when the friction is real enough to warrant revisiting the ADR. Mark it clearly (e.g. _"contradicts ADR-0007 — but worth reopening because…"_). Don't list every theoretical refactor an ADR forbids.
+1. ...
+```
 
-Do NOT propose interfaces yet. Ask the user: "Which of these would you like to explore?"
-
-### 3. Grilling loop
-
-Once the user picks a candidate, drop into a grilling conversation. Walk the design tree with them — constraints, dependencies, the shape of the deepened module, what sits behind the seam, what tests survive.
-
-Side effects happen inline as decisions crystallize:
-
-- **Naming a deepened module after a concept not in `CONTEXT.md`?** Add the term to `CONTEXT.md` — same discipline as `/grill-with-docs` (see [CONTEXT-FORMAT.md](../grill-with-docs/CONTEXT-FORMAT.md)). Create the file lazily if it doesn't exist.
-- **Sharpening a fuzzy term during the conversation?** Update `CONTEXT.md` right there.
-- **User rejects the candidate with a load-bearing reason?** Offer an ADR, framed as: _"Want me to record this as an ADR so future architecture reviews don't re-suggest it?"_ Only offer when the reason would actually be needed by a future explorer to avoid re-suggesting the same thing — skip ephemeral reasons ("not worth it right now") and self-evident ones. See [ADR-FORMAT.md](../grill-with-docs/ADR-FORMAT.md).
-- **Want to explore alternative interfaces for the deepened module?** See [INTERFACE-DESIGN.md](INTERFACE-DESIGN.md).
+不要直接大规模改代码，除非用户明确要求实施。这个 skill 的主要产物是可执行的架构改进计划。

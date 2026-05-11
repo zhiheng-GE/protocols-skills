@@ -1,10 +1,13 @@
-# Refactor Candidates
+# 重构
 
-After TDD cycle, look for:
+只在测试绿时重构。
 
-- **Duplication** → Extract function/class
-- **Long methods** → Break into private helpers (keep tests on public interface)
-- **Shallow modules** → Combine or deepen
-- **Feature envy** → Move logic to where data lives
-- **Primitive obsession** → Introduce value objects
-- **Existing code** the new code reveals as problematic
+重构时：
+
+- 不改变行为；
+- 小步提交；
+- 每步后运行相关测试；
+- 优先改善命名、接口和局部性；
+- 删除无用抽象。
+
+如果重构需要改变行为，先回到 RED，为新行为写测试。

@@ -1,33 +1,33 @@
-# Deep Modules
+# 深模块与 TDD
 
-From "A Philosophy of Software Design":
+TDD 暴露设计问题。测试难写时，通常不是测试问题，而是接口问题。
 
-**Deep module** = small interface + lots of implementation
+## 深模块
 
-```
-┌─────────────────────┐
-│   Small Interface   │  ← Few methods, simple params
-├─────────────────────┤
-│                     │
-│                     │
-│  Deep Implementation│  ← Complex logic hidden
-│                     │
-│                     │
-└─────────────────────┘
-```
+深模块用小接口封装大量行为。调用方不需要知道内部步骤。
 
-**Shallow module** = large interface + little implementation (avoid)
+TDD 中的深模块好处：
 
-```
-┌─────────────────────────────────┐
-│       Large Interface           │  ← Many methods, complex params
-├─────────────────────────────────┤
-│  Thin Implementation            │  ← Just passes through
-└─────────────────────────────────┘
-```
+- 测试入口清晰；
+- fixture 更少；
+- mock 更少；
+- 重构不破坏测试；
+- 行为规格集中。
 
-When designing interfaces, ask:
+## 浅模块信号
 
-- Can I reduce the number of methods?
-- Can I simplify the parameters?
-- Can I hide more complexity inside?
+- 一个行为需要测试多个小函数；
+- 调用方必须按顺序调用工具函数；
+- 每个测试都要搭很多内部状态；
+- 断言必须看内部结构；
+- 改实现就要改测试。
+
+## TDD 反馈
+
+当测试痛苦时，先尝试：
+
+- 提取一个行为级公共接口；
+- 把多步流程藏进模块；
+- 在外部系统前放适配器；
+- 把散落规则集中；
+- 用领域语言重新命名入口。

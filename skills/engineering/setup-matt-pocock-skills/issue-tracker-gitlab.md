@@ -1,23 +1,18 @@
-# Issue tracker: GitLab
+# 问题追踪器：GitLab Issues
 
-Issues and PRDs for this repo live as GitLab issues. Use the [`glab`](https://gitlab.com/gitlab-org/cli) CLI for all operations.
+本仓库使用 GitLab Issues 作为问题追踪器。
 
-## Conventions
+## 读取
 
-- **Create an issue**: `glab issue create --title "..." --description "..."`. Use a heredoc for multi-line descriptions. Pass `--description -` to open an editor.
-- **Read an issue**: `glab issue view <number> --comments`. Use `-F json` for machine-readable output.
-- **List issues**: `glab issue list -F json` with appropriate `--label` filters.
-- **Comment on an issue**: `glab issue note <number> --message "..."`. GitLab calls comments "notes".
-- **Apply / remove labels**: `glab issue update <number> --label "..."` / `--unlabel "..."`. Multiple labels can be comma-separated or by repeating the flag.
-- **Close**: `glab issue close <number>`. `glab issue close` does not accept a closing comment, so post the explanation first with `glab issue note <number> --message "..."`, then close.
-- **Merge requests**: GitLab calls PRs "merge requests". Use `glab mr create`, `glab mr view`, `glab mr note`, etc. — the same shape as `gh pr ...` with `mr` in place of `pr` and `note`/`--message` in place of `comment`/`--body`.
+- 优先使用项目已有 GitLab CLI 或 API 约定。
+- 读取 issue 正文、评论、label、assignee 和状态。
 
-Infer the repo from `git remote -v` — `glab` does this automatically when run inside a clone.
+## 写入
 
-## When a skill says "publish to the issue tracker"
+- 创建 issue 时使用项目现有模板。
+- 更新 label 时使用 `docs/agents/triage-labels.md` 中的真实 label 字符串。
+- 评论中保留 AI 生成免责声明。
 
-Create a GitLab issue.
+## 失败处理
 
-## When a skill says "fetch the relevant ticket"
-
-Run `glab issue view <number> --comments`.
+如果没有可用 CLI/API，不要伪造写入结果。输出要创建的 issue/comment 内容，并请用户手动提交或提供凭据。

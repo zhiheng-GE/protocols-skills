@@ -1,117 +1,89 @@
 ---
 name: write-a-skill
-description: Create new agent skills with proper structure, progressive disclosure, and bundled resources. Use when user wants to create, write, or build a new skill.
+description: 使用正确结构、渐进披露和配套资源创建新的 agent skills。用户想 create/write/build 一个新 skill 时使用。
 ---
 
 # Writing Skills
 
-## Process
+## 流程
 
-1. **Gather requirements** - ask user about:
-   - What task/domain does the skill cover?
-   - What specific use cases should it handle?
-   - Does it need executable scripts or just instructions?
-   - Any reference materials to include?
+1. **收集需求** — 询问用户：
+   - 这个 skill 覆盖什么任务或领域？
+   - 具体使用场景有哪些？
+   - 是否需要可执行脚本，还是只需要指令？
+   - 是否有参考资料要包含？
 
-2. **Draft the skill** - create:
-   - SKILL.md with concise instructions
-   - Additional reference files if content exceeds 500 lines
-   - Utility scripts if deterministic operations needed
+2. **起草 skill** — 创建：
+   - 简洁的 `SKILL.md`；
+   - 如果内容超过约 500 行，拆出额外参考文件；
+   - 如果有确定性操作，加入工具脚本。
 
-3. **Review with user** - present draft and ask:
-   - Does this cover your use cases?
-   - Anything missing or unclear?
-   - Should any section be more/less detailed?
+3. **与用户评审** — 展示草稿并询问：
+   - 是否覆盖使用场景？
+   - 是否遗漏或不清楚？
+   - 哪些部分应更详细或更简短？
 
-## Skill Structure
+4. **安装/链接** — 根据目标 agent 说明如何安装到 `~/.claude/skills` 或 `~/.codex/skills`。
 
+## Skill 结构
+
+最小结构：
+
+```text
+my-skill/
+└── SKILL.md
 ```
-skill-name/
-├── SKILL.md           # Main instructions (required)
-├── REFERENCE.md       # Detailed docs (if needed)
-├── EXAMPLES.md        # Usage examples (if needed)
-└── scripts/           # Utility scripts (if needed)
-    └── helper.js
+
+复杂结构：
+
+```text
+my-skill/
+├── SKILL.md
+├── references/
+│   └── topic.md
+└── scripts/
+    └── helper.sh
 ```
 
-## SKILL.md Template
+## `SKILL.md` 模板
 
-```md
+```markdown
 ---
-name: skill-name
-description: Brief description of capability. Use when [specific triggers].
+name: my-skill
+description: 何时使用这个 skill。包含用户可能说出的触发短语。
 ---
 
-# Skill Name
+# My Skill
 
-## Quick start
+简短说明目标。
 
-[Minimal working example]
+## 流程
 
-## Workflows
+1. ...
+2. ...
 
-[Step-by-step processes with checklists for complex tasks]
+## 规则
 
-## Advanced features
+- ...
 
-[Link to separate files: See [REFERENCE.md](REFERENCE.md)]
+## 输出
+
+...
 ```
 
-## Description Requirements
+## 写作原则
 
-The description is **the only thing your agent sees** when deciding which skill to load. It's surfaced in the system prompt alongside all other installed skills. Your agent reads these descriptions and picks the relevant skill based on the user's request.
+- **触发清楚**：description 说明何时使用，而不只是说它是什么。
+- **指令可执行**：告诉 agent 做什么、按什么顺序、何时停止。
+- **渐进披露**：主文件只放核心流程；长参考内容拆到单独文件。
+- **少即是多**：不要把通用常识塞进 skill。
+- **保留技术字面量**：命令、路径、API、错误消息不要翻译或改写。
+- **可验证**：说明成功标准或输出格式。
 
-**Goal**: Give your agent just enough info to know:
+## 常见错误
 
-1. What capability this skill provides
-2. When/why to trigger it (specific keywords, contexts, file types)
-
-**Format**:
-
-- Max 1024 chars
-- Write in third person
-- First sentence: what it does
-- Second sentence: "Use when [specific triggers]"
-
-**Good example**:
-
-```
-Extract text and tables from PDF files, fill forms, merge documents. Use when working with PDF files or when user mentions PDFs, forms, or document extraction.
-```
-
-**Bad example**:
-
-```
-Helps with documents.
-```
-
-The bad example gives your agent no way to distinguish this from other document skills.
-
-## When to Add Scripts
-
-Add utility scripts when:
-
-- Operation is deterministic (validation, formatting)
-- Same code would be generated repeatedly
-- Errors need explicit handling
-
-Scripts save tokens and improve reliability vs generated code.
-
-## When to Split Files
-
-Split into separate files when:
-
-- SKILL.md exceeds 100 lines
-- Content has distinct domains (finance vs sales schemas)
-- Advanced features are rarely needed
-
-## Review Checklist
-
-After drafting, verify:
-
-- [ ] Description includes triggers ("Use when...")
-- [ ] SKILL.md under 100 lines
-- [ ] No time-sensitive info
-- [ ] Consistent terminology
-- [ ] Concrete examples included
-- [ ] References one level deep
+- description 太泛，导致误触发；
+- 主文件过长，模型难以抓住流程；
+- 把脚本能稳定完成的事写成自然语言步骤；
+- 没有说明失败时如何处理；
+- 缺少示例输出。

@@ -1,19 +1,33 @@
-# Issue tracker: Local Markdown
+# 问题追踪器：本地 Markdown
 
-Issues and PRDs for this repo live as markdown files in `.scratch/`.
+本仓库使用本地 markdown 文件作为问题追踪器。
 
-## Conventions
+## 位置
 
-- One feature per directory: `.scratch/<feature-slug>/`
-- The PRD is `.scratch/<feature-slug>/PRD.md`
-- Implementation issues are `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01`
-- Triage state is recorded as a `Status:` line near the top of each issue file (see `triage-labels.md` for the role strings)
-- Comments and conversation history append to the bottom of the file under a `## Comments` heading
+默认位置：
 
-## When a skill says "publish to the issue tracker"
+```text
+.scratch/issues/
+```
 
-Create a new file under `.scratch/<feature-slug>/` (creating the directory if needed).
+每个 issue 一个 `.md` 文件，文件名使用递增编号和短标题：
 
-## When a skill says "fetch the relevant ticket"
+```text
+0001-short-title.md
+```
 
-Read the file at the referenced path. The user will normally pass the path or the issue number directly.
+## 字段
+
+每个文件至少包含：
+
+- 标题；
+- 当前分流角色；
+- 背景；
+- 验收标准；
+- 备注/评论。
+
+## 规则
+
+- 使用 `docs/agents/triage-labels.md` 的角色名。
+- 不要把本地 issue 当成 GitHub issue URL。
+- 如果未来迁移到真实 issue tracker，保留编号映射。

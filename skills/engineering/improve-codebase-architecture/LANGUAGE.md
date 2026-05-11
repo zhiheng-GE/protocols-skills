@@ -1,53 +1,41 @@
-# Language
+# 架构语言
 
-Shared vocabulary for every suggestion this skill makes. Use these terms exactly — don't substitute "component," "service," "API," or "boundary." Consistent language is the whole point.
+## 模块（Module）
 
-## Terms
+任何同时拥有接口和实现的东西：函数、类、包、slice、服务或页面区域。
 
-**Module**
-Anything with an interface and an implementation. Deliberately scale-agnostic — applies equally to a function, class, package, or tier-spanning slice.
-_Avoid_: unit, component, service.
+## 接口（Interface）
 
-**Interface**
-Everything a caller must know to use the module correctly. Includes the type signature, but also invariants, ordering constraints, error modes, required configuration, and performance characteristics.
-_Avoid_: API, signature (too narrow — those refer only to the type-level surface).
+调用方为了使用模块必须知道的一切：类型、不变量、错误模式、调用顺序、配置、性能假设和副作用。不只是类型签名。
 
-**Implementation**
-What's inside a module — its body of code. Distinct from **Adapter**: a thing can be a small adapter with a large implementation (a Postgres repo) or a large adapter with a small implementation (an in-memory fake). Reach for "adapter" when the seam is the topic; "implementation" otherwise.
+## 实现（Implementation）
 
-**Depth**
-Leverage at the interface — the amount of behaviour a caller (or test) can exercise per unit of interface they have to learn. A module is **deep** when a large amount of behaviour sits behind a small interface. A module is **shallow** when the interface is nearly as complex as the implementation.
+模块内部隐藏起来的代码和决策。
 
-**Seam** _(from Michael Feathers)_
-A place where you can alter behaviour without editing in that place. The *location* at which a module's interface lives. Choosing where to put the seam is its own design decision, distinct from what goes behind it.
-_Avoid_: boundary (overloaded with DDD's bounded context).
+## 深度（Depth）
 
-**Adapter**
-A concrete thing that satisfies an interface at a seam. Describes *role* (what slot it fills), not substance (what's inside).
+接口带来的杠杆。深模块用小接口封装大量行为；浅模块要求调用方理解几乎所有内部细节。
 
-**Leverage**
-What callers get from depth. More capability per unit of interface they have to learn. One implementation pays back across N call sites and M tests.
+## 接缝（Seam）
 
-**Locality**
-What maintainers get from depth. Change, bugs, knowledge, and verification concentrate at one place rather than spreading across callers. Fix once, fixed everywhere.
+可以替换或改变行为的位置。接缝承载接口。使用“接缝”，不要泛泛使用“边界”。
 
-## Principles
+## 适配器（Adapter）
 
-- **Depth is a property of the interface, not the implementation.** A deep module can be internally composed of small, mockable, swappable parts — they just aren't part of the interface. A module can have **internal seams** (private to its implementation, used by its own tests) as well as the **external seam** at its interface.
-- **The deletion test.** Imagine deleting the module. If complexity vanishes, the module wasn't hiding anything (it was a pass-through). If complexity reappears across N callers, the module was earning its keep.
-- **The interface is the test surface.** Callers and tests cross the same seam. If you want to test *past* the interface, the module is probably the wrong shape.
-- **One adapter means a hypothetical seam. Two adapters means a real one.** Don't introduce a seam unless something actually varies across it.
+接缝处的具体实现，例如真实数据库适配器、测试内存适配器、外部 API 适配器。
 
-## Relationships
+## 杠杆（Leverage）
 
-- A **Module** has exactly one **Interface** (the surface it presents to callers and tests).
-- **Depth** is a property of a **Module**, measured against its **Interface**.
-- A **Seam** is where a **Module**'s **Interface** lives.
-- An **Adapter** sits at a **Seam** and satisfies the **Interface**.
-- **Depth** produces **Leverage** for callers and **Locality** for maintainers.
+调用方通过接口少写代码、少知道细节、少处理边界情况所获得的收益。
 
-## Rejected framings
+## 局部性（Locality）
 
-- **Depth as ratio of implementation-lines to interface-lines** (Ousterhout): rewards padding the implementation. We use depth-as-leverage instead.
-- **"Interface" as the TypeScript `interface` keyword or a class's public methods**: too narrow — interface here includes every fact a caller must know.
-- **"Boundary"**: overloaded with DDD's bounded context. Say **seam** or **interface**.
+维护者通过把规则集中到一个模块中获得的收益：改动集中、bug 集中、知识集中。
+
+## 原则
+
+- 深模块优先于浅工具集合。
+- 好接口让调用方少知道，而不是让实现更漂亮。
+- 测试应穿过公共接口验证行为。
+- 接缝应该位于变化轴上。
+- 不要为了抽象而抽象；只有当接口降低调用方认知负担时才抽象。

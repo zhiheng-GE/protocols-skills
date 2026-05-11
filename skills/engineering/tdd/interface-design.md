@@ -1,31 +1,24 @@
-# Interface Design for Testability
+# TDD 中的接口设计
 
-Good interfaces make testing natural:
+测试通过接口表达行为。接口设计差，测试就会脆。
 
-1. **Accept dependencies, don't create them**
+## 好接口
 
-   ```typescript
-   // Testable
-   function processOrder(order, paymentGateway) {}
+- 输入是调用方自然拥有的信息；
+- 输出是调用方真正需要的结果；
+- 隐藏内部顺序；
+- 错误模式稳定；
+- 可以用少量 fixture 测试；
+- 名称来自领域语言。
 
-   // Hard to test
-   function processOrder(order) {
-     const gateway = new StripeGateway();
-   }
-   ```
+## 设计步骤
 
-2. **Return results, don't produce side effects**
+1. 先写测试名称，表达行为。
+2. 想象最理想的调用方式。
+3. 写测试使用这个理想接口。
+4. 实现最少代码。
+5. 根据后续测试调整接口。
 
-   ```typescript
-   // Testable
-   function calculateDiscount(cart): Discount {}
+## 警告
 
-   // Hard to test
-   function applyDiscount(cart): void {
-     cart.total -= discount;
-   }
-   ```
-
-3. **Small surface area**
-   - Fewer methods = fewer tests needed
-   - Fewer params = simpler test setup
+不要为了让当前测试容易而创建只服务测试的接口。接口必须对生产调用方也自然。

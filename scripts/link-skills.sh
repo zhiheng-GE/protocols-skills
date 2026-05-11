@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Links all skills in the repository to ~/.claude/skills, so that
+# Links all non-deprecated skills in the repository to ~/.claude/skills, so that
 # they can be used by the local Claude CLI.
+#
+# 注意：这个脚本会安装 personal/ 和 in-progress/ 中的 skills。
+# 如果只想安装稳定公开 skills，请使用 scripts/link-public-skills.sh。
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 DEST="$HOME/.claude/skills"

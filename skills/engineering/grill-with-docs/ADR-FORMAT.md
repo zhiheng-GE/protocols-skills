@@ -1,47 +1,49 @@
-# ADR Format
+# ADR 格式
 
-ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
+ADR 文件应放在：
 
-Create the `docs/adr/` directory lazily — only when the first ADR is needed.
-
-## Template
-
-```md
-# {Short title of the decision}
-
-{1-3 sentences: what's the context, what did we decide, and why.}
+```text
+docs/adr/NNNN-short-kebab-title.md
 ```
 
-That's it. An ADR can be a single paragraph. The value is in recording *that* a decision was made and *why* — not in filling out sections.
+使用递增编号。标题用一句话说明决策。
 
-## Optional sections
+## 模板
 
-Only include these when they add genuine value. Most ADRs won't need them.
+```markdown
+# NNNN 决策标题
 
-- **Status** frontmatter (`proposed | accepted | deprecated | superseded by ADR-NNNN`) — useful when decisions are revisited
-- **Considered Options** — only when the rejected alternatives are worth remembering
-- **Consequences** — only when non-obvious downstream effects need to be called out
+## 状态
 
-## Numbering
+Accepted | Superseded | Deprecated
 
-Scan `docs/adr/` for the highest existing number and increment by one.
+## 背景
 
-## When to offer an ADR
+我们面临什么问题？哪些约束让这个决策重要？
 
-All three of these must be true:
+## 决策
 
-1. **Hard to reverse** — the cost of changing your mind later is meaningful
-2. **Surprising without context** — a future reader will look at the code and wonder "why on earth did they do it this way?"
-3. **The result of a real trade-off** — there were genuine alternatives and you picked one for specific reasons
+我们决定做什么？用明确、可执行的语言描述。
 
-If a decision is easy to reverse, skip it — you'll just reverse it. If it's not surprising, nobody will wonder why. If there was no real alternative, there's nothing to record beyond "we did the obvious thing."
+## 后果
 
-### What qualifies
+### 正面后果
 
-- **Architectural shape.** "We're using a monorepo." "The write model is event-sourced, the read model is projected into Postgres."
-- **Integration patterns between contexts.** "Ordering and Billing communicate via domain events, not synchronous HTTP."
-- **Technology choices that carry lock-in.** Database, message bus, auth provider, deployment target. Not every library — just the ones that would take a quarter to swap out.
-- **Boundary and scope decisions.** "Customer data is owned by the Customer context; other contexts reference it by ID only." The explicit no-s are as valuable as the yes-s.
-- **Deliberate deviations from the obvious path.** "We're using manual SQL instead of an ORM because X." Anything where a reasonable reader would assume the opposite. These stop the next engineer from "fixing" something that was deliberate.
-- **Constraints not visible in the code.** "We can't use AWS because of compliance requirements." "Response times must be under 200ms because of the partner API contract."
-- **Rejected alternatives when the rejection is non-obvious.** If you considered GraphQL and picked REST for subtle reasons, record it — otherwise someone will suggest GraphQL again in six months.
+- ...
+
+### 负面后果 / 代价
+
+- ...
+
+### 后续工作
+
+- ...
+```
+
+## 写作规则
+
+- ADR 记录已做出的决策，不是开放式头脑风暴。
+- 写清楚为什么现在需要这个决策。
+- 避免长篇背景；只保留未来维护者需要知道的约束。
+- 如果替代旧 ADR，明确链接旧文件并说明 supersede 关系。
+- 使用项目 `CONTEXT.md` 中的术语。

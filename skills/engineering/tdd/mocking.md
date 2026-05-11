@@ -1,59 +1,63 @@
-# When to Mock
+# Mocking 指南
 
-Mock at **system boundaries** only:
+Mock 是最后手段，不是默认工具。
 
-- External APIs (payment, email, etc.)
-- Databases (sometimes - prefer test DB)
-- Time/randomness
-- File system (sometimes)
+## 可以 mock 的对象
 
-Don't mock:
+可以 mock：
 
-- Your own classes/modules
-- Internal collaborators
-- Anything you control
+- 外部网络服务；
+- 支付、邮件、短信等第三方系统；
+- 时间、随机数；
+- 很慢或不稳定的 I/O；
+- 明确位于接缝处的适配器。
 
-## Designing for Mockability
+## 不要 mock 的对象
 
-At system boundaries, design interfaces that are easy to mock:
+不要 mock：
 
-**1. Use dependency injection**
+- 被测模块的内部函数；
+- 同一进程内的领域逻辑；
+- 你真正想验证的行为；
+- 只是为了让测试更容易而 mock 的协作者。
 
-Pass external dependencies in rather than creating them internally:
+## 好 mock
 
-```typescript
-// Easy to mock
-function processPayment(order, paymentClient) {
-  return paymentClient.charge(order.total);
-}
+好 mock 位于真实接缝：
 
-// Hard to mock
-function processPayment(order) {
-  const client = new StripeClient(process.env.STRIPE_KEY);
-  return client.charge(order.total);
-}
+```text
+OrderService -> PaymentGateway interface -> FakePaymentGateway
 ```
 
-**2. Prefer SDK-style interfaces over generic fetchers**
+测试仍然验证 `OrderService` 的真实行为。
 
-Create specific functions for each external operation instead of one generic function with conditional logic:
+## 坏 mock
 
-```typescript
-// GOOD: Each function is independently mockable
-const api = {
-  getUser: (id) => fetch(`/users/${id}`),
-  getOrders: (userId) => fetch(`/users/${userId}/orders`),
-  createOrder: (data) => fetch('/orders', { method: 'POST', body: data }),
-};
+坏 mock 复制实现结构：
 
-// BAD: Mocking requires conditional logic inside the mock
-const api = {
-  fetch: (endpoint, options) => fetch(endpoint, options),
-};
+```text
+mock validateCart
+mock calculateTax
+mock persistOrder
+assert each called once
 ```
 
-The SDK approach means:
-- Each mock returns one specific shape
-- No conditional logic in test setup
-- Easier to see which endpoints a test exercises
-- Type safety per endpoint
+这种测试只证明实现按当前方式拼接，不能证明用户行为正确。
+
+## Fake 优先
+
+如果可能，使用 fake/in-memory adapter 替代 mock：
+
+- 更接近真实行为；
+- 支持多步场景；
+- 更少耦合调用次数；
+- 更适合重构。
+
+## 判断问题
+
+如果你需要 mock 很多东西才能测试一个行为，先问：
+
+- 接口是不是太浅？
+- 是否缺少应用层 use-case？
+- 副作用是否应该在一个适配器后面？
+- 测试是否选错了入口？

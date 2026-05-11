@@ -1,15 +1,17 @@
-# Triage Labels
+# 分流标签配置模板
 
-The skills speak in terms of five canonical triage roles. This file maps those roles to the actual label strings used in this repo's issue tracker.
+将规范分流角色映射到问题追踪器中的真实 label。
 
-| Label in mattpocock/skills | Label in our tracker | Meaning                                  |
-| -------------------------- | -------------------- | ---------------------------------------- |
-| `needs-triage`             | `needs-triage`       | Maintainer needs to evaluate this issue  |
-| `needs-info`               | `needs-info`         | Waiting on reporter for more information |
-| `ready-for-agent`          | `ready-for-agent`    | Fully specified, ready for an AFK agent  |
-| `ready-for-human`          | `ready-for-human`    | Requires human implementation            |
-| `wontfix`                  | `wontfix`            | Will not be actioned                     |
+| 分流角色 | 真实 label |
+| --- | --- |
+| `needs-triage` | `needs-triage` |
+| `needs-info` | `needs-info` |
+| `ready-for-agent` | `ready-for-agent` |
+| `ready-for-afk` | `ready-for-afk` |
+| `out-of-scope` | `out-of-scope` |
 
-When a skill mentions a role (e.g. "apply the AFK-ready triage label"), use the corresponding label string from this table.
+## 规则
 
-Edit the right-hand column to match whatever vocabulary you actually use.
+- 每个 issue 同一时间只应有一个分流角色。
+- 如果真实 label 与上表不同，更新右列，不要改左列的规范角色。
+- `triage`、`to-prd` 和 `to-issues` 必须读取这个映射后再写 label。

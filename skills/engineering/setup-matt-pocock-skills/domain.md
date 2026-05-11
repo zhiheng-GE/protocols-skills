@@ -1,51 +1,20 @@
-# Domain Docs
+# 领域文档配置模板
 
-How the engineering skills should consume this repo's domain documentation when exploring the codebase.
+本仓库的 agent skills 使用以下领域文档：
 
-## Before exploring, read these
+- 领域语言：`CONTEXT.md`
+- 架构决策记录：`docs/adr/`
 
-- **`CONTEXT.md`** at the repo root, or
-- **`CONTEXT-MAP.md`** at the repo root if it exists — it points at one `CONTEXT.md` per context. Read each one relevant to the topic.
-- **`docs/adr/`** — read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
+## 使用规则
 
-If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The producer skill (`/grill-with-docs`) creates them lazily when terms or decisions actually get resolved.
+- 在修改代码、拆 issue、写 PRD、诊断 bug 或分析架构前，先读取相关领域语言。
+- 输出中使用 `CONTEXT.md` 的术语，避免重新发明近义词。
+- 触及架构约束、模块接缝、数据模型或技术选型时，检查 `docs/adr/`。
+- 如果讨论产生新的稳定术语，更新 `CONTEXT.md`。
+- 如果形成高影响或难逆转的决策，新增 ADR。
 
-## File structure
+## 缺失文档时
 
-Single-context repo (most repos):
+如果 `CONTEXT.md` 不存在，先从 README、代码命名和现有讨论中提取最小词汇表。
 
-```
-/
-├── CONTEXT.md
-├── docs/adr/
-│   ├── 0001-event-sourced-orders.md
-│   └── 0002-postgres-for-write-model.md
-└── src/
-```
-
-Multi-context repo (presence of `CONTEXT-MAP.md` at the root):
-
-```
-/
-├── CONTEXT-MAP.md
-├── docs/adr/                          ← system-wide decisions
-└── src/
-    ├── ordering/
-    │   ├── CONTEXT.md
-    │   └── docs/adr/                  ← context-specific decisions
-    └── billing/
-        ├── CONTEXT.md
-        └── docs/adr/
-```
-
-## Use the glossary's vocabulary
-
-When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis, a test name), use the term as defined in `CONTEXT.md`. Don't drift to synonyms the glossary explicitly avoids.
-
-If the concept you need isn't in the glossary yet, that's a signal — either you're inventing language the project doesn't use (reconsider) or there's a real gap (note it for `/grill-with-docs`).
-
-## Flag ADR conflicts
-
-If your output contradicts an existing ADR, surface it explicitly rather than silently overriding:
-
-> _Contradicts ADR-0007 (event-sourced orders) — but worth reopening because…_
+如果 `docs/adr/` 不存在，但出现架构决策，创建目录并从 `0001-...md` 开始编号。

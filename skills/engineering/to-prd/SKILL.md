@@ -1,76 +1,75 @@
 ---
 name: to-prd
-description: Turn the current conversation context into a PRD and publish it to the project issue tracker. Use when user wants to create a PRD from the current context.
+description: 将当前对话上下文整理为 PRD，并发布到项目问题追踪器。用户想从当前上下文创建 PRD 时使用。
 ---
 
-This skill takes the current conversation context and codebase understanding and produces a PRD. Do NOT interview the user — just synthesize what you already know.
+这个 skill 会基于当前对话上下文和代码库理解生成 PRD。**不要采访用户**，只综合已知信息。
 
-The issue tracker and triage label vocabulary should have been provided to you — run `/setup-matt-pocock-skills` if not.
+问题追踪器和分流标签词汇应已提供；如果没有，请运行 `/setup-matt-pocock-skills`。
 
-## Process
+## 流程
 
-1. Explore the repo to understand the current state of the codebase, if you haven't already. Use the project's domain glossary vocabulary throughout the PRD, and respect any ADRs in the area you're touching.
+1. 如果尚未探索仓库，先了解当前代码库状态。整个 PRD 使用项目领域词汇，并尊重相关 ADR。
 
-2. Sketch out the major modules you will need to build or modify to complete the implementation. Actively look for opportunities to extract deep modules that can be tested in isolation.
+2. 概述完成实现需要构建或修改的主要模块。主动寻找可以提取为深模块、并能独立测试的机会。
 
-A deep module (as opposed to a shallow module) is one which encapsulates a lot of functionality in a simple, testable interface which rarely changes.
+   深模块是用简单、可测试、很少变化的接口封装大量功能的模块。
 
-Check with the user that these modules match their expectations. Check with the user which modules they want tests written for.
+   向用户确认这些模块是否符合预期，并确认哪些模块需要测试。
 
-3. Write the PRD using the template below, then publish it to the project issue tracker. Apply the `ready-for-agent` triage label - no need for additional triage.
+3. 使用下面模板编写 PRD，然后发布到问题追踪器。应用 `ready-for-agent` 分流标签或项目配置中的等价标签；不需要额外 triage。
 
 <prd-template>
 
 ## Problem Statement
 
-The problem that the user is facing, from the user's perspective.
+我们要解决什么问题？谁受影响？为什么现在重要？
 
-## Solution
+## Goals
 
-The solution to the problem, from the user's perspective.
+- ...
 
-## User Stories
+## Non-Goals
 
-A LONG, numbered list of user stories. Each user story should be in the format of:
+- ...
 
-1. As an <actor>, I want a <feature>, so that <benefit>
+## Users / Use Cases
 
-<user-story-example>
-1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
-</user-story-example>
+- ...
 
-This list of user stories should be extremely extensive and cover all aspects of the feature.
+## Proposed Solution
 
-## Implementation Decisions
+描述用户可见行为和系统行为。使用项目领域语言。
 
-A list of implementation decisions that were made. This can include:
+## Modules / Architecture
 
-- The modules that will be built/modified
-- The interfaces of those modules that will be modified
-- Technical clarifications from the developer
-- Architectural decisions
-- Schema changes
-- API contracts
-- Specific interactions
+- 要新增或修改的模块；
+- 关键接口和接缝；
+- 可以成为深模块的地方；
+- 相关 ADR 或需要新增的 ADR。
 
-Do NOT include specific file paths or code snippets. They may end up being outdated very quickly.
+## Acceptance Criteria
 
-Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it within the relevant decision and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
+- [ ] ...
+- [ ] ...
 
-## Testing Decisions
+## Test Plan
 
-A list of testing decisions that were made. Include:
+- ...
 
-- A description of what makes a good test (only test external behavior, not implementation details)
-- Which modules will be tested
-- Prior art for the tests (i.e. similar types of tests in the codebase)
+## Risks / Open Questions
 
-## Out of Scope
-
-A description of the things that are out of scope for this PRD.
-
-## Further Notes
-
-Any further notes about the feature.
+- ...
 
 </prd-template>
+
+## 写作规则
+
+- 不要编造用户没有给出的需求；将不确定内容放到 `Risks / Open Questions`。
+- 不要写实现清单替代 PRD；PRD 应先描述问题、行为和验收。
+- 具体到足以让 `to-issues` 拆分，但不要把每个小任务都展开。
+- 如果写入问题追踪器失败，输出 PRD 正文和失败原因。
+
+## 输出
+
+汇报 PRD issue 链接/编号、应用的 label、以及任何开放问题。

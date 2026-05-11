@@ -1,9 +1,9 @@
 # In Progress
 
-Skills that are still being developed. They're not ready to ship — expect rough edges, breaking changes, and abandoned experiments. They're excluded from the plugin and the top-level README until they graduate to a stable bucket.
+仍在开发中的 skills。它们尚未准备发布，可能有粗糙边缘、破坏性变化或被放弃的实验。毕业到稳定 bucket 前，不进入插件和顶层 README。
 
-- **[handoff](./handoff/SKILL.md)** — Compact the current conversation into a handoff document so another agent can continue the work.
-- **[review](./review/SKILL.md)** — Review changes since a fixed point along two parallel axes: **Standards** (does the diff follow the repo's coding standards?) and **Spec** (does the diff faithfully implement the originating issue/PRD?).
-- **[writing-beats](./writing-beats/SKILL.md)** — Shape an article as a journey of beats, choose-your-own-adventure style. Pick a starting beat, write only that beat, then pivot to the next, until the article reaches a natural end.
-- **[writing-fragments](./writing-fragments/SKILL.md)** — Grilling session that mines you for fragments — heterogeneous nuggets of writing — and appends them to a single document as raw material for a future article.
-- **[writing-shape](./writing-shape/SKILL.md)** — Take a markdown file of raw material and shape it into an article paragraph by paragraph, arguing format choices at each step.
+- **[handoff](./handoff/SKILL.md)** — 将当前对话压缩成交接文档，方便另一个 agent 继续工作。
+- **[review](./review/SKILL.md)** — 从两个并行维度审查固定点之后的变更：**标准**（diff 是否符合仓库编码标准）和 **规格**（diff 是否忠实实现原始 issue/PRD）。
+- **[writing-beats](./writing-beats/SKILL.md)** — 用文章节拍塑造写作旅程，像选择分支一样逐个写出节拍，直到文章自然结束。
+- **[writing-fragments](./writing-fragments/SKILL.md)** — 通过追问收集异质写作碎片，并追加到单一文档，作为未来文章素材。
+- **[writing-shape](./writing-shape/SKILL.md)** — 将 markdown 原始素材逐段塑造成文章，并在每一步说明格式选择。

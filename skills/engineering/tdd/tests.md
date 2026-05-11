@@ -1,61 +1,59 @@
-# Good and Bad Tests
+# 测试指南
 
-## Good Tests
+## 好测试
 
-**Integration-style**: Test through real interfaces, not mocks of internal parts.
+好测试验证行为：
 
-```typescript
-// GOOD: Tests observable behavior
-test("user can checkout with valid cart", async () => {
-  const cart = createCart();
-  cart.add(product);
-  const result = await checkout(cart, paymentMethod);
-  expect(result.status).toBe("confirmed");
-});
+```text
+当用户用有效购物车结账时，系统创建订单并返回订单号。
 ```
 
-Characteristics:
+特征：
 
-- Tests behavior users/callers care about
-- Uses public API only
-- Survives internal refactors
-- Describes WHAT, not HOW
-- One logical assertion per test
+- 通过公共接口进入；
+- 断言可观察结果；
+- 不关心内部函数调用；
+- 名称像规格；
+- 重构后仍应通过。
 
-## Bad Tests
+## 坏测试
 
-**Implementation-detail tests**: Coupled to internal structure.
+坏测试验证实现：
 
-```typescript
-// BAD: Tests implementation details
-test("checkout calls paymentService.process", async () => {
-  const mockPayment = jest.mock(paymentService);
-  await checkout(cart, payment);
-  expect(mockPayment.process).toHaveBeenCalledWith(cart.total);
-});
-```
+- mock 被测模块内部函数；
+- 断言私有方法被调用；
+- 依赖内部数据结构；
+- 复制实现逻辑来算预期值；
+- 只测试 getter/setter。
 
-Red flags:
+## 测试粒度
 
-- Mocking internal collaborators
-- Testing private methods
-- Asserting on call counts/order
-- Test breaks when refactoring without behavior change
-- Test name describes HOW not WHAT
-- Verifying through external means instead of interface
+优先选择能触达真实行为的最小 seam：
 
-```typescript
-// BAD: Bypasses interface to verify
-test("createUser saves to database", async () => {
-  await createUser({ name: "Alice" });
-  const row = await db.query("SELECT * FROM users WHERE name = ?", ["Alice"]);
-  expect(row).toBeDefined();
-});
+1. 模块公共 API；
+2. service/use-case 层；
+3. HTTP/API 入口；
+4. UI 用户流。
 
-// GOOD: Verifies through interface
-test("createUser makes user retrievable", async () => {
-  const user = await createUser({ name: "Alice" });
-  const retrieved = await getUser(user.id);
-  expect(retrieved.name).toBe("Alice");
-});
-```
+不要为了“单元测试”而切断所有真实行为。
+
+## 命名
+
+使用行为命名：
+
+- 好：`creates an order for a valid cart`
+- 坏：`calls createOrder with params`
+
+## 断言
+
+断言结果，不断言路线：
+
+- 返回值；
+- 持久化后的可观察状态；
+- 发出的领域事件；
+- 用户可见输出；
+- 错误类型和消息。
+
+## Fixtures
+
+fixture 应表达领域状态，而不是数据库细节。重复 fixture 说明可以提取测试 builder，但不要隐藏重要行为。

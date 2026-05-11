@@ -1,83 +1,97 @@
 ---
 name: to-issues
-description: Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.
+description: 将计划、规格或 PRD 拆成问题追踪器上的可独立领取 issues，使用曳光弹式垂直切片。用户想把计划转成 issues、创建实现 tickets，或拆分工作时使用。
 ---
 
 # To Issues
 
-Break a plan into independently-grabbable issues using vertical slices (tracer bullets).
+使用垂直切片（tracer bullets）把计划拆成可独立领取的问题/工作项。
 
-The issue tracker and triage label vocabulary should have been provided to you — run `/setup-matt-pocock-skills` if not.
+问题追踪器和分流标签词汇应已提供；如果没有，请运行 `/setup-matt-pocock-skills`。
 
-## Process
+## 流程
 
-### 1. Gather context
+### 1. 收集上下文
 
-Work from whatever is already in the conversation context. If the user passes an issue reference (issue number, URL, or path) as an argument, fetch it from the issue tracker and read its full body and comments.
+使用当前对话中已有内容。如果用户传入 issue 引用（编号、URL 或路径），从问题追踪器读取完整正文和评论。
 
-### 2. Explore the codebase (optional)
+### 2. 探索代码库（可选）
 
-If you have not already explored the codebase, do so to understand the current state of the code. Issue titles and descriptions should use the project's domain glossary vocabulary, and respect ADRs in the area you're touching.
+如果尚未探索代码库，先了解当前实现状态。Issue 标题和描述应使用项目领域词汇，并尊重相关 ADR。
 
-### 3. Draft vertical slices
+### 3. 草拟垂直切片
 
-Break the plan into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
+把计划拆成 **曳光弹式垂直切片**。每个 issue 都应端到端穿过所有相关集成层，而不是某一层的水平任务。
 
-Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an architectural decision or a design review. AFK slices can be implemented and merged without human interaction. Prefer AFK over HITL where possible.
+好 issue：
 
-<vertical-slice-rules>
-- Each slice delivers a narrow but COMPLETE path through every layer (schema, API, UI, tests)
-- A completed slice is demoable or verifiable on its own
-- Prefer many thin slices over few thick ones
-</vertical-slice-rules>
+- 可以由一个 agent 独立领取；
+- 有明确验收标准；
+- 能产生可运行、可验证的行为；
+- 尽量小，但不是“只改数据库”或“只写 UI”；
+- 明确依赖关系。
 
-### 4. Quiz the user
+坏 issue：
 
-Present the proposed breakdown as a numbered list. For each slice, show:
+- “实现后端”；
+- “添加所有 UI”；
+- “重构 services”；
+- “写测试”；
+- 需要先读完整计划才能知道做什么。
 
-- **Title**: short descriptive name
-- **Type**: HITL / AFK
-- **Blocked by**: which other slices (if any) must complete first
-- **User stories covered**: which user stories this addresses (if the source material has them)
+### 4. 排序和标注依赖
 
-Ask the user:
+为每个 issue 标注：
 
-- Does the granularity feel right? (too coarse / too fine)
-- Are the dependency relationships correct?
-- Should any slices be merged or split further?
-- Are the correct slices marked as HITL and AFK?
+- 前置依赖；
+- 是否可并行；
+- 风险点；
+- 推荐测试方式。
 
-Iterate until the user approves the breakdown.
+优先让第一个 issue 建立端到端反馈路径。
 
-### 5. Publish the issues to the issue tracker
+### 5. 发布
 
-For each approved slice, publish a new issue to the issue tracker. Use the issue body template below. These issues are considered ready for AFK agents, so publish them with the correct triage label unless instructed otherwise.
+将 issues 创建到配置的问题追踪器。应用适当分流标签，通常是 `ready-for-agent` 或项目配置中的等价 label。
 
-Publish issues in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
+如果无法写入问题追踪器，不要假装已创建。输出完整 issue 草稿和失败原因。
 
-<issue-template>
-## Parent
+## Issue 模板
 
-A reference to the parent issue on the issue tracker (if the source was an existing issue, otherwise omit this section).
+```markdown
+## 背景
 
-## What to build
+...
 
-A concise description of this vertical slice. Describe the end-to-end behavior, not layer-by-layer implementation.
+## 要实现的行为
 
-Avoid specific file paths or code snippets — they go stale fast. Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it here and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
+...
 
-## Acceptance criteria
+## 验收标准
 
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
+- [ ] ...
+- [ ] ...
 
-## Blocked by
+## 实施提示
 
-- A reference to the blocking ticket (if any)
+- 相关模块：...
+- 相关 ADR / 领域术语：...
 
-Or "None - can start immediately" if no blockers.
+## 测试建议
 
-</issue-template>
+...
 
-Do NOT close or modify any parent issue.
+## 依赖
+
+- Blocked by: ...
+- Can run in parallel with: ...
+```
+
+## 输出
+
+完成后汇报：
+
+- 创建了哪些 issues；
+- 每个 issue 的顺序和依赖；
+- 哪些可以并行；
+- 哪些风险需要人工关注。

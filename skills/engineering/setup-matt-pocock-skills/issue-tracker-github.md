@@ -1,22 +1,21 @@
-# Issue tracker: GitHub
+# 问题追踪器：GitHub Issues
 
-Issues and PRDs for this repo live as GitHub issues. Use the `gh` CLI for all operations.
+本仓库使用 GitHub Issues 作为问题追踪器。
 
-## Conventions
+## 读取
 
-- **Create an issue**: `gh issue create --title "..." --body "..."`. Use a heredoc for multi-line bodies.
-- **Read an issue**: `gh issue view <number> --comments`, filtering comments by `jq` and also fetching labels.
-- **List issues**: `gh issue list --state open --json number,title,body,labels,comments --jq '[.[] | {number, title, body, labels: [.labels[].name], comments: [.comments[].body]}]'` with appropriate `--label` and `--state` filters.
-- **Comment on an issue**: `gh issue comment <number> --body "..."`
-- **Apply / remove labels**: `gh issue edit <number> --add-label "..."` / `--remove-label "..."`
-- **Close**: `gh issue close <number> --comment "..."`
+- 使用 `gh issue view <number> --comments` 读取 issue 和评论。
+- 使用 `gh issue list` 按 label、assignee、state 查询。
+- 如果 `gh` 不可用，使用用户提供的 URL 或本地上下文。
 
-Infer the repo from `git remote -v` — `gh` does this automatically when run inside a clone.
+## 写入
 
-## When a skill says "publish to the issue tracker"
+- 创建 issue：`gh issue create`。
+- 更新 label：`gh issue edit <number> --add-label <label>` / `--remove-label <label>`。
+- 发表评论：`gh issue comment <number> --body-file <file>`。
 
-Create a GitHub issue.
+## 约定
 
-## When a skill says "fetch the relevant ticket"
-
-Run `gh issue view <number> --comments`.
+- 使用 `docs/agents/triage-labels.md` 中的真实 label 字符串。
+- AI 生成的 triage 评论必须包含项目要求的免责声明。
+- 不要假设 label 存在；如果命令失败，向用户报告缺失 label。

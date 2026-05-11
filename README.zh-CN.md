@@ -37,7 +37,7 @@
 
 ```text
 .
-├── README.md                    # 英文项目说明和技能索引
+├── README.md                    # 中文项目说明和技能索引
 ├── README.zh-CN.md              # 中文项目说明
 ├── CONTEXT.md                   # 项目领域语言和术语说明
 ├── CLAUDE.md                    # 仓库维护规则
@@ -106,41 +106,7 @@
 
 ---
 
-### 4. Personal：个人工作流技能
-
-这些技能与作者自己的工作环境绑定，不作为公开推荐技能安装。
-
-| 技能 | 作用 |
-| --- | --- |
-| [`edit-article`](./skills/personal/edit-article/SKILL.md) | 编辑和优化文章结构、表达和可读性。 |
-| [`obsidian-vault`](./skills/personal/obsidian-vault/SKILL.md) | 管理 Obsidian 笔记库，支持 wikilink 和索引笔记。 |
-
----
-
-### 5. In Progress：开发中技能
-
-这些技能仍处于实验或草稿阶段，暂不建议作为稳定能力使用。
-
-| 技能 | 作用 |
-| --- | --- |
-| [`handoff`](./skills/in-progress/handoff/SKILL.md) | 将当前对话压缩成交接文档，方便另一个智能体继续工作。 |
-| [`review`](./skills/in-progress/review/SKILL.md) | 从规范和需求两个维度审查代码变更。 |
-| [`writing-beats`](./skills/in-progress/writing-beats/SKILL.md) | 以“节拍”方式逐段塑造文章。 |
-| [`writing-fragments`](./skills/in-progress/writing-fragments/SKILL.md) | 通过追问收集写作碎片，作为后续文章素材。 |
-| [`writing-shape`](./skills/in-progress/writing-shape/SKILL.md) | 将原始素材整理成完整文章。 |
-
----
-
-### 6. Deprecated：已废弃技能
-
-这些技能已经不再推荐使用，保留用于历史参考。
-
-| 技能 | 作用 |
-| --- | --- |
-| [`design-an-interface`](./skills/deprecated/design-an-interface/SKILL.md) | 生成多个不同方向的接口设计。 |
-| [`qa`](./skills/deprecated/qa/SKILL.md) | 通过交互式 QA 收集 bug 并创建 GitHub issue。 |
-| [`request-refactor-plan`](./skills/deprecated/request-refactor-plan/SKILL.md) | 通过访谈生成重构计划并提交 issue。 |
-| [`ubiquitous-language`](./skills/deprecated/ubiquitous-language/SKILL.md) | 从对话中提取领域通用语言。 |
+> `personal/`、`in-progress/` 和 `deprecated/` 中的技能不属于公开稳定技能，因此不在顶层 README 展示。需要查看时，请进入对应 bucket 的 README。
 
 ---
 
@@ -182,19 +148,74 @@ npx skills@latest add mattpocock/skills
 
 该脚本会查找仓库内所有 `SKILL.md` 文件。
 
-### 链接技能到 Claude 本地目录
+### 链接稳定公开技能到 Claude 全局目录
+
+推荐中文团队使用：
 
 ```bash
-./scripts/link-skills.sh
+./scripts/link-public-skills.sh
 ```
 
-该脚本会将仓库中的技能软链接到：
+该脚本只安装稳定公开技能：
+
+```text
+skills/engineering/*
+skills/productivity/*
+skills/misc/*
+```
+
+并将它们软链接到：
 
 ```text
 ~/.claude/skills
 ```
 
-注意：当前脚本会排除 `deprecated/`，但不会排除 `personal/` 和 `in-progress/`。如果只想安装稳定公开技能，建议进一步调整脚本过滤规则。
+### 链接所有非废弃技能
+
+如果你也想安装 `personal/` 和 `in-progress/` 中的技能，可以使用：
+
+```bash
+./scripts/link-skills.sh
+```
+
+该脚本会排除 `deprecated/`，但会安装 `personal/` 和 `in-progress/`。
+
+### 安装到 Codex
+
+Codex 可使用相同的软链接思路：
+
+```bash
+mkdir -p ~/.codex/skills
+CLAUDE_SKILLS_DIR=~/.codex/skills ./scripts/link-public-skills.sh
+```
+
+### 更新已安装技能
+
+如果使用软链接方式安装，更新源仓库即可：
+
+```bash
+cd /Users/cds-dn-222/Downloads/AI_PROJECT/protocols-skills
+git pull
+./scripts/link-public-skills.sh
+```
+
+已有技能内容会立即来自最新仓库；重新运行脚本是为了链接新增技能。
+
+### 一致性检查
+
+修改公开技能、README 或插件清单后运行：
+
+```bash
+./scripts/check-consistency.sh
+```
+
+它会检查：
+
+- 公开 skills 是否都在顶层 `README.md` 中有链接；
+- 公开 skills 是否都在对应 bucket README 中有链接；
+- 公开 skills 是否都在 `.claude-plugin/plugin.json` 中；
+- `personal/`、`in-progress/`、`deprecated/` 是否没有误加入插件清单；
+- 所有 `SKILL.md` 是否包含基本 frontmatter。
 
 ---
 
@@ -209,7 +230,7 @@ npx skills@latest add mattpocock/skills
 
 - `personal/`、`in-progress/`、`deprecated/` 下的技能不应出现在顶层 README 或插件清单中。
 
-当前项目中，`README.md` 和各 bucket README 基本保持一致；但 `.claude-plugin/plugin.json` 暂未包含 `misc/` 下的 4 个技能。如果严格遵守 `CLAUDE.md`，需要补齐这些插件条目。
+当前项目通过 `./scripts/check-consistency.sh` 校验 README、bucket README 和 `.claude-plugin/plugin.json` 的一致性。修改公开技能、插件清单或 README 后应运行该脚本。
 
 ---
 

@@ -1,30 +1,28 @@
 ---
 name: prototype
-description: Build a throwaway prototype to flush out a design before committing to it. Routes between two branches — a runnable terminal app for state/business-logic questions, or several radically different UI variations toggleable from one route. Use when the user wants to prototype, sanity-check a data model or state machine, mock up a UI, explore design options, or says "prototype this", "let me play with it", "try a few designs".
+description: 在正式投入前构建一次性 prototype 来验证设计。根据问题分两条路径：状态/业务逻辑问题用可运行终端 app；UI 问题在一个 route 中做多个差异明显的可切换方案。用户想 prototype、sanity-check 数据模型或状态机、mock UI、探索设计方案，或说 “prototype this”“let me play with it”“try a few designs” 时使用。
 ---
 
 # Prototype
 
-A prototype is **throwaway code that answers a question**. The question decides the shape.
+Prototype 是 **用来回答问题的一次性代码**。问题决定形态。
 
-## Pick a branch
+## 选择路径
 
-Identify which question is being answered — from the user's prompt, the surrounding code, or by asking if the user is around:
+从用户提示、周边代码或追问中识别要回答的问题：
 
-- **"Does this logic / state model feel right?"** → [LOGIC.md](LOGIC.md). Build a tiny interactive terminal app that pushes the state machine through cases that are hard to reason about on paper.
-- **"What should this look like?"** → [UI.md](UI.md). Generate several radically different UI variations on a single route, switchable via a URL search param and a floating bottom bar.
+- **“这个逻辑 / 状态模型感觉对吗？”** → [LOGIC.md](LOGIC.md)。构建一个很小的交互式终端 app，用来推动状态机走过纸面上难推理的案例。
+- **“这应该长什么样？”** → [UI.md](UI.md)。在单个 route 中生成多个差异明显的 UI 方案，通过 URL search param 和底部浮动栏切换。
 
-The two branches produce very different artifacts — getting this wrong wastes the whole prototype. If the question is genuinely ambiguous and the user isn't reachable, default to whichever branch better matches the surrounding code (a backend module → logic; a page or component → UI) and state the assumption at the top of the prototype.
+两条路径产物完全不同，选错会浪费整个 prototype。如果问题确实模糊且用户不在场，根据周边代码默认选择：后端模块 → logic；页面或组件 → UI，并在 prototype 顶部写明假设。
 
-## Rules that apply to both
+## 两条路径都适用的规则
 
-1. **Throwaway from day one, and clearly marked as such.** Locate the prototype code close to where it will actually be used (next to the module or page it's prototyping for) so context is obvious — but name it so a casual reader can see it's a prototype, not production. For throwaway UI routes, obey whatever routing convention the project already uses; don't invent a new top-level structure.
-2. **One command to run.** Whatever the project's existing task runner supports — `pnpm <name>`, `python <path>`, `bun <path>`, etc. The user must be able to start it without thinking.
-3. **No persistence by default.** State lives in memory. Persistence is the thing the prototype is *checking*, not something it should depend on. If the question explicitly involves a database, hit a scratch DB or a local file with a clear "PROTOTYPE — wipe me" name.
-4. **Skip the polish.** No tests, no error handling beyond what makes the prototype *runnable*, no abstractions. The point is to learn something fast and then delete it.
-5. **Surface the state.** After every action (logic) or on every variant switch (UI), print or render the full relevant state so the user can see what changed.
-6. **Delete or absorb when done.** When the prototype has answered its question, either delete it or fold the validated decision into the real code — don't leave it rotting in the repo.
+1. **从第一天起就是一次性的，并清楚标记。** prototype 代码放在实际会使用它的模块或页面附近，方便理解上下文；但命名必须让读者一眼看出它不是生产代码。
+2. **一个命令即可运行。** 使用项目现有 task runner 支持的方式，例如 `pnpm <name>`、`python <path>`、`bun <path>`。用户不应费脑启动。
+3. **默认不持久化。** 状态存在内存中。持久化往往是 prototype 要验证的问题，不应成为依赖。如果问题明确涉及数据库，使用 scratch DB 或带有 “PROTOTYPE — wipe me” 标记的本地文件。
+4. **跳过打磨。** 不写测试，不做超出可运行所需的错误处理，不抽象。目标是快速学习，然后删除。
+5. **把问题写在顶部。** 读者必须知道这个 prototype 回答什么问题，以及完成后如何判断答案。
+6. **不要混入生产路径。** 不要让正常用户流量或生产构建依赖 prototype。
 
-## When done
-
-The *answer* is the only thing worth keeping from a prototype. Capture it somewhere durable (commit message, ADR, issue, or a `NOTES.md` next to the prototype) along with the question it was answering. If the user is around, that capture is a quick conversation; if not, leave the placeholder so they (or you, on the next pass) can fill in the verdict before deleting the prototype.
+完成后，告诉用户如何运行、它回答什么问题、观察什么信号，以及何时删除。

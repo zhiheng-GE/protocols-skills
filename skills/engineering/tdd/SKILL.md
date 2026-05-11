@@ -1,109 +1,121 @@
 ---
 name: tdd
-description: Test-driven development with red-green-refactor loop. Use when user wants to build features or fix bugs using TDD, mentions "red-green-refactor", wants integration tests, or asks for test-first development.
+description: 使用红绿重构循环进行测试驱动开发（TDD）。当用户想用 TDD 构建功能或修复 bug、提到 red-green-refactor、需要 integration tests，或要求 test-first development 时使用。
 ---
 
 # Test-Driven Development
 
-## Philosophy
+## 哲学
 
-**Core principle**: Tests should verify behavior through public interfaces, not implementation details. Code can change entirely; tests shouldn't.
+**核心原则**：测试应通过公共接口验证行为，而不是验证实现细节。代码可以完全重构；测试不应该因此失效。
 
-**Good tests** are integration-style: they exercise real code paths through public APIs. They describe _what_ the system does, not _how_ it does it. A good test reads like a specification - "user can checkout with valid cart" tells you exactly what capability exists. These tests survive refactors because they don't care about internal structure.
+**好测试** 偏 integration-style：通过公共 API 触发真实代码路径。它们描述系统做什么，而不是怎么做。好测试读起来像规格说明，例如 “user can checkout with valid cart”。这类测试能在重构后存活，因为它不关心内部结构。
 
-**Bad tests** are coupled to implementation. They mock internal collaborators, test private methods, or verify through external means (like querying a database directly instead of using the interface). The warning sign: your test breaks when you refactor, but behavior hasn't changed. If you rename an internal function and tests fail, those tests were testing implementation, not behavior.
+**坏测试** 与实现耦合。它们 mock 内部协作者、测试私有方法，或通过外部方式验证（比如直接查数据库，而不是走接口）。警告信号：你重构了代码但行为没变，测试却失败。如果只是重命名内部函数就导致测试失败，说明测试测的是实现，不是行为。
 
-See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking guidelines.
+示例见 [tests.md](tests.md)，mock 指南见 [mocking.md](mocking.md)。
 
-## Anti-Pattern: Horizontal Slices
+## 反模式：水平切片
 
-**DO NOT write all tests first, then all implementation.** This is "horizontal slicing" - treating RED as "write all tests" and GREEN as "write all code."
+**不要一次写完所有测试，再一次写完所有实现。** 这是“水平切片”：把 RED 理解为“写所有测试”，把 GREEN 理解为“写所有代码”。
 
-This produces **crap tests**:
+这会产生糟糕测试：
 
-- Tests written in bulk test _imagined_ behavior, not _actual_ behavior
-- You end up testing the _shape_ of things (data structures, function signatures) rather than user-facing behavior
-- Tests become insensitive to real changes - they pass when behavior breaks, fail when behavior is fine
-- You outrun your headlights, committing to test structure before understanding the implementation
+- 批量写出的测试测的是想象中的行为，不是真实行为；
+- 没有从第一个失败中学习；
+- 实现被迫匹配错误抽象；
+- 失败太多，无法定位下一步。
 
-**Correct approach**: Vertical slices via tracer bullets. One test → one implementation → repeat. Each test responds to what you learned from the previous cycle. Because you just wrote the code, you know exactly what behavior matters and how to verify it.
+正确方式是 **垂直切片**：
 
-```
-WRONG (horizontal):
-  RED:   test1, test2, test3, test4, test5
-  GREEN: impl1, impl2, impl3, impl4, impl5
+1. 写一个小的失败测试；
+2. 写最少代码让它通过；
+3. 重构；
+4. 再切下一片。
 
-RIGHT (vertical):
-  RED→GREEN: test1→impl1
-  RED→GREEN: test2→impl2
-  RED→GREEN: test3→impl3
-  ...
-```
+每一片都应端到端穿过相关接口。
 
-## Workflow
+## 流程
 
-### 1. Planning
+### 1. 选一个最小行为
 
-When exploring the codebase, use the project's domain glossary so that test names and interface vocabulary match the project's language, and respect ADRs in the area you're touching.
+从用户目标中选一个最小可观察行为。避免“设置基础设施”式任务，除非它本身有可观察行为。
 
-Before writing any code:
+写下：
 
-- [ ] Confirm with user what interface changes are needed
-- [ ] Confirm with user which behaviors to test (prioritize)
-- [ ] Identify opportunities for [deep modules](deep-modules.md) (small interface, deep implementation)
-- [ ] Design interfaces for [testability](interface-design.md)
-- [ ] List the behaviors to test (not implementation steps)
-- [ ] Get user approval on the plan
-
-Ask: "What should the public interface look like? Which behaviors are most important to test?"
-
-**You can't test everything.** Confirm with the user exactly which behaviors matter most. Focus testing effort on critical paths and complex logic, not every possible edge case.
-
-### 2. Tracer Bullet
-
-Write ONE test that confirms ONE thing about the system:
-
-```
-RED:   Write test for first behavior → test fails
-GREEN: Write minimal code to pass → test passes
+```text
+行为：...
+公共接口：...
+成功信号：...
 ```
 
-This is your tracer bullet - proves the path works end-to-end.
+### 2. RED：写一个失败测试
 
-### 3. Incremental Loop
+测试必须：
 
-For each remaining behavior:
+- 通过公共接口触发行为；
+- 名称描述用户可见或领域可见行为；
+- 失败原因与缺失行为直接相关；
+- 尽量少 mock；
+- 不锁死内部结构。
 
-```
-RED:   Write next test → fails
-GREEN: Minimal code to pass → passes
-```
+运行测试，确认它因为预期原因失败。
 
-Rules:
+### 3. GREEN：最小实现
 
-- One test at a time
-- Only enough code to pass current test
-- Don't anticipate future tests
-- Keep tests focused on observable behavior
+只写让当前测试通过的代码。
 
-### 4. Refactor
+允许：
 
-After all tests pass, look for [refactor candidates](refactoring.md):
+- 简单实现；
+- 硬编码一小步；
+- 暂时重复。
 
-- [ ] Extract duplication
-- [ ] Deepen modules (move complexity behind simple interfaces)
-- [ ] Apply SOLID principles where natural
-- [ ] Consider what new code reveals about existing code
-- [ ] Run tests after each refactor step
+不允许：
 
-**Never refactor while RED.** Get to GREEN first.
+- 顺手实现未来行为；
+- 大范围重构；
+- 改测试来适配实现；
+- 通过 mock 绕过真实行为。
 
-## Checklist Per Cycle
+### 4. REFACTOR：改善设计
 
-```
-[ ] Test describes behavior, not implementation
-[ ] Test uses public interface only
-[ ] Test would survive internal refactor
-[ ] Code is minimal for this test
-[ ] No speculative features added
-```
+测试通过后再重构。
+
+重构目标：
+
+- 提取深模块；
+- 收紧接口；
+- 消除重复；
+- 改善命名；
+- 把规则移动到正确接缝。
+
+每次重构后运行测试。
+
+### 5. 重复
+
+继续下一个最小行为。每一步都保持测试绿。
+
+## 与架构结合
+
+TDD 不只是测试技巧，也是设计反馈。
+
+如果测试很难写，通常说明：
+
+- 公共接口不清楚；
+- 模块太浅；
+- 接缝位置错误；
+- 规则散落；
+- 副作用没有被适配器隔离。
+
+此时先改设计，不要强行写脆弱测试。参考 [deep-modules.md](deep-modules.md) 和 [interface-design.md](interface-design.md)。
+
+## 输出要求
+
+完成后汇报：
+
+- 新增/修改的行为；
+- 测试覆盖的公共接口；
+- 红绿重构循环中的关键步骤；
+- 运行过的测试/类型检查命令；
+- 任何刻意不覆盖的范围。
