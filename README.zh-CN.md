@@ -68,16 +68,16 @@
 
 | 技能 | 作用 |
 | --- | --- |
-| `diagnose` | 用系统化流程调试复杂 bug 或性能问题：复现、缩小范围、提出假设、插桩、修复、回归测试。 |
-| `grill-with-docs` | 在开发前对需求进行深入追问，同时维护项目领域语言 `CONTEXT.md` 和 ADR。 |
-| `triage` | 按状态机流程对 issue 进行分流和标记。 |
-| `improve-codebase-architecture` | 分析代码库中的架构改进机会，帮助降低复杂度。 |
-| `setup-matt-pocock-skills` | 初始化本技能集合需要的项目级配置。 |
-| `tdd` | 以红绿重构方式进行测试驱动开发。 |
-| `to-issues` | 将计划、PRD 或方案拆分成可以独立执行的 issue。 |
-| `to-prd` | 根据当前对话上下文生成 PRD，并提交为 issue。 |
-| `zoom-out` | 让智能体从更高层次解释代码或系统上下文。 |
-| `prototype` | 快速构建一次性原型，用于验证设计或业务逻辑。 |
+| [`diagnose`](./skills/engineering/diagnose/SKILL.md) | 用系统化流程调试复杂 bug 或性能问题：复现、缩小范围、提出假设、插桩、修复、回归测试。 |
+| [`grill-with-docs`](./skills/engineering/grill-with-docs/SKILL.md) | 在开发前对需求进行深入追问，同时维护项目领域语言 `CONTEXT.md` 和 ADR。 |
+| [`triage`](./skills/engineering/triage/SKILL.md) | 按状态机流程对 issue 进行分流和标记。 |
+| [`improve-codebase-architecture`](./skills/engineering/improve-codebase-architecture/SKILL.md) | 分析代码库中的架构改进机会，帮助降低复杂度。 |
+| [`setup-matt-pocock-skills`](./skills/engineering/setup-matt-pocock-skills/SKILL.md) | 初始化本技能集合需要的项目级配置。 |
+| [`tdd`](./skills/engineering/tdd/SKILL.md) | 以红绿重构方式进行测试驱动开发。 |
+| [`to-issues`](./skills/engineering/to-issues/SKILL.md) | 将计划、PRD 或方案拆分成可以独立执行的 issue。 |
+| [`to-prd`](./skills/engineering/to-prd/SKILL.md) | 根据当前对话上下文生成 PRD，并提交为 issue。 |
+| [`zoom-out`](./skills/engineering/zoom-out/SKILL.md) | 让智能体从更高层次解释代码或系统上下文。 |
+| [`prototype`](./skills/engineering/prototype/SKILL.md) | 快速构建一次性原型，用于验证设计或业务逻辑。 |
 
 ---
 
@@ -87,9 +87,9 @@
 
 | 技能 | 作用 |
 | --- | --- |
-| `caveman` | 超压缩沟通模式，减少冗余表达，保留技术准确性。 |
-| `grill-me` | 对一个计划或设计进行高强度追问，帮助用户澄清所有关键分支。 |
-| `write-a-skill` | 帮助创建新的技能，并遵循项目的技能结构和写作规范。 |
+| [`caveman`](./skills/productivity/caveman/SKILL.md) | 超压缩沟通模式，减少冗余表达，保留技术准确性。 |
+| [`grill-me`](./skills/productivity/grill-me/SKILL.md) | 对一个计划或设计进行高强度追问，帮助用户澄清所有关键分支。 |
+| [`write-a-skill`](./skills/productivity/write-a-skill/SKILL.md) | 帮助创建新的技能，并遵循项目的技能结构和写作规范。 |
 
 ---
 
@@ -99,10 +99,10 @@
 
 | 技能 | 作用 |
 | --- | --- |
-| `git-guardrails-claude-code` | 为 Claude Code 设置 Git 安全钩子，阻止危险命令。 |
-| `migrate-to-shoehorn` | 将测试文件中的 `as` 类型断言迁移到 `@total-typescript/shoehorn`。 |
-| `scaffold-exercises` | 创建课程练习目录结构，包括题目、解答和讲解。 |
-| `setup-pre-commit` | 配置 Husky、lint-staged、Prettier、类型检查和测试等 pre-commit 流程。 |
+| [`git-guardrails-claude-code`](./skills/misc/git-guardrails-claude-code/SKILL.md) | 为 Claude Code 设置 Git 安全钩子，阻止危险命令。 |
+| [`migrate-to-shoehorn`](./skills/misc/migrate-to-shoehorn/SKILL.md) | 将测试文件中的 `as` 类型断言迁移到 `@total-typescript/shoehorn`。 |
+| [`scaffold-exercises`](./skills/misc/scaffold-exercises/SKILL.md) | 创建课程练习目录结构，包括题目、解答和讲解。 |
+| [`setup-pre-commit`](./skills/misc/setup-pre-commit/SKILL.md) | 配置 Husky、lint-staged、Prettier、类型检查和测试等 pre-commit 流程。 |
 
 ---
 
@@ -112,8 +112,8 @@
 
 | 技能 | 作用 |
 | --- | --- |
-| `edit-article` | 编辑和优化文章结构、表达和可读性。 |
-| `obsidian-vault` | 管理 Obsidian 笔记库，支持 wikilink 和索引笔记。 |
+| [`edit-article`](./skills/personal/edit-article/SKILL.md) | 编辑和优化文章结构、表达和可读性。 |
+| [`obsidian-vault`](./skills/personal/obsidian-vault/SKILL.md) | 管理 Obsidian 笔记库，支持 wikilink 和索引笔记。 |
 
 ---
 
@@ -123,11 +123,11 @@
 
 | 技能 | 作用 |
 | --- | --- |
-| `handoff` | 将当前对话压缩成交接文档，方便另一个智能体继续工作。 |
-| `review` | 从规范和需求两个维度审查代码变更。 |
-| `writing-beats` | 以“节拍”方式逐段塑造文章。 |
-| `writing-fragments` | 通过追问收集写作碎片，作为后续文章素材。 |
-| `writing-shape` | 将原始素材整理成完整文章。 |
+| [`handoff`](./skills/in-progress/handoff/SKILL.md) | 将当前对话压缩成交接文档，方便另一个智能体继续工作。 |
+| [`review`](./skills/in-progress/review/SKILL.md) | 从规范和需求两个维度审查代码变更。 |
+| [`writing-beats`](./skills/in-progress/writing-beats/SKILL.md) | 以“节拍”方式逐段塑造文章。 |
+| [`writing-fragments`](./skills/in-progress/writing-fragments/SKILL.md) | 通过追问收集写作碎片，作为后续文章素材。 |
+| [`writing-shape`](./skills/in-progress/writing-shape/SKILL.md) | 将原始素材整理成完整文章。 |
 
 ---
 
@@ -137,10 +137,10 @@
 
 | 技能 | 作用 |
 | --- | --- |
-| `design-an-interface` | 生成多个不同方向的接口设计。 |
-| `qa` | 通过交互式 QA 收集 bug 并创建 GitHub issue。 |
-| `request-refactor-plan` | 通过访谈生成重构计划并提交 issue。 |
-| `ubiquitous-language` | 从对话中提取领域通用语言。 |
+| [`design-an-interface`](./skills/deprecated/design-an-interface/SKILL.md) | 生成多个不同方向的接口设计。 |
+| [`qa`](./skills/deprecated/qa/SKILL.md) | 通过交互式 QA 收集 bug 并创建 GitHub issue。 |
+| [`request-refactor-plan`](./skills/deprecated/request-refactor-plan/SKILL.md) | 通过访谈生成重构计划并提交 issue。 |
+| [`ubiquitous-language`](./skills/deprecated/ubiquitous-language/SKILL.md) | 从对话中提取领域通用语言。 |
 
 ---
 
